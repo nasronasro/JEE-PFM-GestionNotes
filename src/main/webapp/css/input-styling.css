@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+form .input-design {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border: 2px solid #888888 !important;
+    border-radius: 4px;
+    padding: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+form .input-design:hover {
+	border-color: #5a9bd8 !important; /* Blueish border on hover */
+}

@@ -1,0 +1,33 @@
+@charset "UTF-8";
+.card {
+    background-color: #2B2B2B !important;
+    border: 1px solid #C0C0C0;
+    color:white;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.2);
+    min-height: 220px;
+  }
+  
+  .card-text-container {
+    
+    max-height: 100px;
+    overflow: hidden;
+  }
+  .card-body{
+    display: flex;
+    flex-direction: column ;
+    justify-content: space-between;
+    height:100px;
+  }
+  .show-more-btn {
+    display: none;
+    color: #ffc107;
+    background: none;
+    border: none;
+    text-decoration: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  .show-more-btn:hover {
+    text-decoration: underline;
+  }
