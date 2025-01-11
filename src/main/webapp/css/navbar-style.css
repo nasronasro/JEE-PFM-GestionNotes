@@ -1,0 +1,7 @@
+@charset "UTF-8";
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background-color: #2c2f33;
+}

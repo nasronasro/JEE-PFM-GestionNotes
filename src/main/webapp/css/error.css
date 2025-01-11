@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+/* Center the error container */
+ .error-container {
+     max-width: 800px;
+     margin: auto;
+     overflow: hidden; /* Prevent content spill */
+ }
+
+ /* Style the error message details */
+ pre {
+     white-space: pre-wrap; /* Wrap long text */
+     word-wrap: break-word; /* Break long words */
+ }
+
+ /* Ensure long text stays within bounds */
+ .error-details {
+     max-width: 100%;
+     overflow-x: auto; /* Add horizontal scrolling if necessary */
+ }

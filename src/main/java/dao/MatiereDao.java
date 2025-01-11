@@ -13,9 +13,11 @@ public class MatiereDao {
 	public MatiereDao() throws ClassNotFoundException, SQLException  {
 		cnx = ConnectingLink.Connecter();
 	}
-	public List<Matiere> GetAllMatieres() throws SQLException{
+	public List<Matiere> GetAllMatieres(Utilisateur user) throws SQLException{
 		List<Matiere> matieres= new ArrayList<Matiere>();
-		PreparedStatement ps = cnx.prepareStatement("SELECT m.Id_matiere, m.Label, m.Importance, p.id_proffesseur, p.nom, p.prenom FROM matiere m Join proffesseurs p on p.id_Proffesseur = m.id_Proffesseur");
+		String query = "SELECT m.Id_matiere, m.Label, m.Importance, p.id_proffesseur, p.nom, p.prenom FROM proffesseurs p join matiere m on p.id_Proffesseur = m.id_Proffesseur WHERE m.id_utilisateur = ?";
+		PreparedStatement ps = cnx.prepareStatement(query);
+		ps.setString(1, user.getId_utilisateur());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			String id = rs.getString(1);
@@ -24,14 +26,33 @@ public class MatiereDao {
 			String profId = rs.getString(4);
 			String profNom = rs.getString(5);
 			String profPrenom = rs.getString(6);
-			matieres.add(new Matiere(id,label,impInt,new Proffesseur(profId,profNom,profPrenom)));	
+			matieres.add(new Matiere(id,label,impInt,new Proffesseur(profId,profNom,profPrenom),user));	
 		}
 		return matieres;
 	}
-	public boolean VerifyMatiere(String id) throws SQLException {
+	public List<Matiere> GetFiltrerMatieres(Utilisateur user,String searchValue) throws SQLException{
+		List<Matiere> matieres= new ArrayList<Matiere>();
+		String query = "SELECT m.Id_matiere, m.Label, m.Importance, p.id_proffesseur, p.nom, p.prenom FROM proffesseurs p join matiere m on p.id_Proffesseur = m.id_Proffesseur WHERE m.id_utilisateur = ? and m.label like CONCAT('%', ?, '%')";
+		PreparedStatement ps = cnx.prepareStatement(query);
+		ps.setString(1, user.getId_utilisateur());
+		ps.setString(2, searchValue);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			String id = rs.getString(1);
+			String label = rs.getString(2);
+			int impInt = rs.getInt(3);
+			String profId = rs.getString(4);
+			String profNom = rs.getString(5);
+			String profPrenom = rs.getString(6);
+			matieres.add(new Matiere(id,label,impInt,new Proffesseur(profId,profNom,profPrenom),user));	
+		}
+		return matieres;
+	}
+	public boolean VerifyMatiere(String id,Utilisateur user) throws SQLException {
 		
-		PreparedStatement ps = cnx.prepareStatement("SELECT count(Id_matiere) FROM matiere where Id_matiere = ?");
+		PreparedStatement ps = cnx.prepareStatement("SELECT count(Id_matiere) FROM matiere where Id_matiere = ? and id_utilisateur = ?");
 		ps.setString(1, id);
+		ps.setString(2, user.getId_utilisateur());
 		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
@@ -41,7 +62,7 @@ public class MatiereDao {
 		return false;
 	}
 	public boolean insertMatiere(Matiere matiere) throws SQLException {
-        String query = "INSERT INTO Matiere (Id_matiere, Label, Importance, Id_proffesseur) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Matiere (Id_matiere, Label, Importance, Id_proffesseur,Id_utilisateur) VALUES (?, ?, ?, ?,?)";
         PreparedStatement ps = cnx.prepareStatement(query);
 
         ps.setString(1, matiere.getId_matiere());
@@ -51,7 +72,7 @@ public class MatiereDao {
         	ps.setString(4, matiere.getProffesseur().getId_proffesseur());
         else
         	ps.setString(4, "null");
-
+        ps.setString(5, matiere.getUser().getId_utilisateur());
         if (ps.executeUpdate() == 1) {
             return true;
         }
@@ -83,16 +104,17 @@ public class MatiereDao {
 			psInsertAI.executeUpdate();
 			return res;
 		}
-	public Matiere GetMatiere(String id_matiere) throws SQLException {
-		PreparedStatement ps = cnx.prepareStatement("SELECT Id_matiere, Label,Importance, Id_proffesseur FROM matiere where id_matiere = ?");
+	public Matiere GetMatiere(String id_matiere,Utilisateur user) throws SQLException {
+		PreparedStatement ps = cnx.prepareStatement("SELECT Id_matiere, Label,Importance, Id_proffesseur FROM matiere where id_matiere = ? and id_utilisateur = ?");
 		ps.setString(1, id_matiere);
+		ps.setString(2, user.getId_utilisateur());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			String id = rs.getString(1);
 			String label = rs.getString(2);
 			int impInt = rs.getInt(3);
 			String idProf = rs.getString(4);
-			return new Matiere(id,label,impInt,new Proffesseur(idProf));
+			return new Matiere(id,label,impInt,new Proffesseur(idProf),user);
 		}
 		return null;
 	}

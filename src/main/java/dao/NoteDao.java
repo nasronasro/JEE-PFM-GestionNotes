@@ -25,10 +25,25 @@ public class NoteDao {
 		}
 		return false;
 	}
-	public List<Note> GetListNotes(String user) throws SQLException, ClassNotFoundException{
-		String userId = userDao.GetCurrentUser(user);
+	public List<Note> GetListNotes(Utilisateur user) throws SQLException, ClassNotFoundException{
 		PreparedStatement ps= cnx.prepareStatement("Select Id_Note,Title,Content,Id_matiere from notes where id_utilisateur = ?");
-		ps.setString(1, userId);
+		ps.setString(1, user.getId_utilisateur());
+		ResultSet resultSet = ps.executeQuery();
+		List<Note> notes = new ArrayList<Note>();
+		while(resultSet.next()) {
+			String noteId = resultSet.getString("Id_Note");
+			String titre = resultSet.getString("Title");
+			String content = resultSet.getString("Content");
+			String Id_matiere = resultSet.getString("Id_matiere");
+			Note note = new Note(noteId,titre,content,Id_matiere);
+			notes.add(note);
+		}
+		return notes;
+	}
+	public List<Note> GetListNotesByMatiere(Utilisateur user,String id_matiere) throws SQLException, ClassNotFoundException{
+		PreparedStatement ps= cnx.prepareStatement("Select Id_Note,Title,Content,Id_matiere from notes where id_utilisateur = ? and id_matiere = ?");
+		ps.setString(1, user.getId_utilisateur());
+		ps.setString(2, id_matiere);
 		ResultSet resultSet = ps.executeQuery();
 		List<Note> notes = new ArrayList<Note>();
 		while(resultSet.next()) {

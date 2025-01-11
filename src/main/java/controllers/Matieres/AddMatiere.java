@@ -17,6 +17,8 @@ import dao.Matiere;
 import dao.MatiereDao;
 import dao.Proffesseur;
 import dao.ProffesseurDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 @WebServlet("/add-matiere")
 public class AddMatiere extends HttpServlet {
@@ -24,12 +26,14 @@ public class AddMatiere extends HttpServlet {
 	private ChifrageService chifreService;
 	private List<Proffesseur> listProfs;
 	private ProffesseurDao profDao;
+	private UtilisateurDao userDao;
 	private MatiereDao matDao;
     public AddMatiere() throws ClassNotFoundException, SQLException {
         super();
         chifreService = new ChifrageService();
         profDao = new ProffesseurDao();
 		matDao = new MatiereDao();
+		userDao = new UtilisateurDao();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +41,9 @@ public class AddMatiere extends HttpServlet {
 		try {
 			
 			profDao = new ProffesseurDao();
-			listProfs = profDao.GetAllProffessors();
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			listProfs = profDao.GetAllProffessors(user);
 			request.setAttribute("ListProfs", listProfs);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -80,12 +86,13 @@ public class AddMatiere extends HttpServlet {
 	
 		try {
 			Proffesseur professeur = null;
-			if(profDao.GetProfessor(profStr) != null) {
-				 professeur= profDao.GetProfessor(profStr);				
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			if(profDao.GetProfessor(profStr,user) != null) {
+				 professeur= profDao.GetProfessor(profStr,user);				
 			}
 			id = chifreService.ChifreId(matDao.CurrentIncrementValue(), "mate");
-			
-			Matiere mat = new Matiere(id,label,importance,professeur);
+			Matiere mat = new Matiere(id,label,importance,professeur,user);
 
 			if(matDao.insertMatiere(mat)) {
 				System.out.println("matiere added!");

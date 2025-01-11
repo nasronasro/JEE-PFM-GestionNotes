@@ -15,15 +15,20 @@ import dao.Matiere;
 import dao.MatiereDao;
 import dao.Note;
 import dao.NoteDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 @WebServlet("/modify-note")
 public class ModifyNote extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	NoteDao noteDao;
-	MatiereDao matiereDao;
-	List<Matiere> listMatieres;
+	private UtilisateurDao userDao;
+	private NoteDao noteDao;
+	private MatiereDao matiereDao;
+	private List<Matiere> listMatieres;
+	
     public ModifyNote() throws ClassNotFoundException, SQLException {
         super();
+        userDao = new UtilisateurDao();
         noteDao = new NoteDao();
         matiereDao = new MatiereDao();
     }
@@ -42,8 +47,9 @@ public class ModifyNote extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/list-note?errorMessage=\" + URLEncoder.encode(errorMessage, \"UTF-8\")");
 			    return;
 			}
-			
-			listMatieres = matiereDao.GetAllMatieres();
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			listMatieres = matiereDao.GetAllMatieres(user);
 			request.setAttribute("ListMatieres", listMatieres);
 			Note note = noteDao.getNote(id);
 			request.setAttribute("title", note.getTitre());

@@ -3,17 +3,13 @@
 <%@ page import="dao.Matiere" %>
 
 <%@ include file="../../../common/Header.jsp" %>
-		<% 
-			List<Matiere> matieres = null;
-			if(request.getAttribute("MatiereList") != null){
-				matieres = (List<Matiere>)request.getAttribute("MatiereList");
-			}
-		%>
+
+		<%  List<Matiere> matieres = (List<Matiere>)request.getAttribute("MatiereList");%>
 	<div class="Container">
 	<form>
 		<button class="btn btn-outline-success btn-lg" formaction="add-matiere">Ajouter Matiere</button>
 	</form>
-		<% if(matieres != null){ %>
+		<% if(matieres != null || !matieres.isEmpty()){ %>
 		<table class="table table-c text-white">
 			<thead>
 			    <tr>
@@ -39,11 +35,10 @@
 			<% } %>
  			 </tbody>
 		</table>
+		
 		<% }else{ %>
 			<h1>List est vide mintenant.</h1>
-			<%			
-		}
-			%>
+			<%}%>
 			
 	</div>
 <%@ include file="../../../common/Footer.html" %>

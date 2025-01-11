@@ -17,34 +17,40 @@ import dao.Matiere;
 import dao.MatiereDao;
 import dao.Proffesseur;
 import dao.ProffesseurDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 @WebServlet("/modify-matiere")
 public class MofidyMatiere extends HttpServlet {
 	private static final long serialVersionUID = 1L; 
 	private MatiereDao matDao;
-	ProffesseurDao profDao;
-	List<Proffesseur> listProfs;
+	private UtilisateurDao userDao;
+	private ProffesseurDao profDao;
+	private List<Proffesseur> listProfs;
 	
     public MofidyMatiere() throws ClassNotFoundException, SQLException {
         super();  
         matDao = new MatiereDao();
         profDao = new ProffesseurDao();
+        userDao = new UtilisateurDao();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id_matiere = request.getParameter("id_matiere");
 		System.out.println("matiere : " + id_matiere);
 		try {
-			if(!matDao.VerifyMatiere(id_matiere)) {
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			if(!matDao.VerifyMatiere(id_matiere,user)) {
 				response.sendRedirect(request.getContextPath() + "/list-matiere");
 				return;
 			}
 			
-			listProfs = profDao.GetAllProffessors();
+			listProfs = profDao.GetAllProffessors(user);
 			request.setAttribute("ListProfs", listProfs);
 			request.setAttribute("id_matiere", id_matiere);
 			
-			Matiere mat = matDao.GetMatiere(id_matiere);
+			Matiere mat = matDao.GetMatiere(id_matiere,user);
 			request.setAttribute("label", mat.getLabel());
 			request.setAttribute("ImpInt", mat.getImportance(mat.getImportance()));
 			request.setAttribute("ProfesseurId", mat.getProffesseur().getId_proffesseur());
@@ -100,14 +106,16 @@ public class MofidyMatiere extends HttpServlet {
 		
 
 		try {
-			Proffesseur professeur = profDao.GetProfessor(profStr);
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			Proffesseur professeur = profDao.GetProfessor(profStr,user);
 			if( professeur == null) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/Matieres/modify-matiere.jsp");
 				dispatcher.forward(request, response);
 				return;
 			}
 			
-			Matiere mat = new Matiere(id,label,importance,professeur);
+			Matiere mat = new Matiere(id,label,importance,professeur,user);
 
 			if(matDao.UpdatetMatiere(id,mat)) {
 				System.out.println("matiere added!");

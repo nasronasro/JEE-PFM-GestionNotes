@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.NoteDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 @WebServlet("/add-note")
 @SuppressWarnings("unused")
 public class AddNote extends HttpServlet {
 	private static final long serialVersionUID = 1L; 
-	
+	private UtilisateurDao userDao;
 	private MatiereDao matiereDao;
 	private List<Matiere> listMatieres;
 	private NoteDao noteDao;
@@ -33,7 +35,7 @@ public class AddNote extends HttpServlet {
 	
     public AddNote() throws ClassNotFoundException, SQLException  { 
     	super();
-    	
+    	userDao = new UtilisateurDao();
     	matiereDao = new MatiereDao();
     	noteService = new NoteService();
     	noteDao = new NoteDao();
@@ -42,7 +44,9 @@ public class AddNote extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		try {
-			listMatieres = matiereDao.GetAllMatieres();
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			listMatieres = matiereDao.GetAllMatieres(user);
 			request.setAttribute("ListMatieres", listMatieres);
 		} catch (SQLException e) {
 			e.printStackTrace();

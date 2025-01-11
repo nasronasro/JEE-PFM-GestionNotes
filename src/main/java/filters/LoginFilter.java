@@ -10,7 +10,6 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -39,11 +38,10 @@ public class LoginFilter extends HttpFilter implements Filter {
             return;
         }
         if (httpRequest.getSession().getAttribute("username") == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
+            httpResponse.sendRedirect("login");
         } else {
             chain.doFilter(request, response);
-        }	
-        
+        } 
 	}
 	public void init(FilterConfig fConfig) throws ServletException {
 

@@ -10,6 +10,25 @@ public class UtilisateurDao  {
 	public UtilisateurDao() throws ClassNotFoundException, SQLException{	
 		cnx = ConnectingLink.Connecter();
 	}
+	public Utilisateur GetUserByUsername(String username) throws SQLException {
+		PreparedStatement psUser = cnx.prepareStatement("Select Id_Utilisateur, Nom, Prenom, Addresse, Phone, Email from utilisateurs where Username = ?");
+		psUser.setString(1, username);
+	
+		ResultSet resultSet = psUser.executeQuery();
+
+		while(resultSet.next()) {
+			String Id = resultSet.getString(1);
+			String nom = resultSet.getString(2);
+			String prenom = resultSet.getString(3);
+			String addresse = resultSet.getString(4);
+			String phone  = resultSet.getString(5);
+			String email = resultSet.getString(6);
+			return new Utilisateur(Id,username,nom,prenom,email,null,addresse,phone);
+		}
+		
+		return null;
+	}
+	
 	public boolean InsererUtilisateur(Utilisateur user) throws SQLException{
 		PreparedStatement ps = cnx.prepareStatement("INSERT INTO Utilisateurs(Id_Utilisateur, Nom, Prenom, Username, Addresse, Phone, Email, Mot_de_pass) "
 				+ "VALUE (?,?,?,?,?,?,?,?)");

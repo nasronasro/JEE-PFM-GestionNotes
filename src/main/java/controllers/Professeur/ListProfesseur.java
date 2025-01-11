@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import dao.ProffesseurDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 /**
  * Servlet implementation class ListProfesseur
@@ -17,15 +19,19 @@ import dao.ProffesseurDao;
 @WebServlet("/list-professeur")
 public class ListProfesseur extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ProffesseurDao profDao;
+	private ProffesseurDao profDao;
+	private UtilisateurDao userDao;
     public ListProfesseur() throws ClassNotFoundException, SQLException {
         super();
         profDao = new ProffesseurDao();
+        userDao = new UtilisateurDao();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {	
-			request.setAttribute("profList", profDao.GetAllProffessors());
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			request.setAttribute("profList", profDao.GetAllProffessors(user));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -33,9 +39,7 @@ public class ListProfesseur extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/Professeurs/list-professeur.jsp");
 		dispatcher.forward(request, response);
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

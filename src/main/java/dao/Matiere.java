@@ -7,18 +7,21 @@ public class Matiere {
 	private String label;
 	private Importance importance;
 	private Proffesseur proffesseur;
+	private Utilisateur user;
 	
-	public Matiere(String id,String lbl,Importance imp, Proffesseur prof) {
+	public Matiere(String id,String lbl,Importance imp, Proffesseur prof,Utilisateur user) {
 		id_matiere = id;
 		label = lbl;
 		importance = imp;
 		proffesseur = prof;
+		this.user = user;
 	}
-	public Matiere(String id,String lbl,int imp, Proffesseur prof) {
+	public Matiere(String id,String lbl,int imp, Proffesseur prof,Utilisateur user) {
 		id_matiere = id;
 		label = lbl;
 		importance = getImportance(imp);
 		proffesseur = prof;
+		this.user = user;
 	}
 
 	public String getId_matiere() {
@@ -62,6 +65,12 @@ public class Matiere {
 	}
 	public void setProffesseur(Proffesseur proffesseur) {
 		this.proffesseur = proffesseur;
+	}
+	public Utilisateur getUser() {
+		return user;
+	}
+	public void setUser(Utilisateur user) {
+		this.user = user;
 	}
 	
 }

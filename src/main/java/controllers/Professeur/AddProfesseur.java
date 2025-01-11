@@ -13,6 +13,8 @@ import java.sql.SQLException;
 
 import dao.Proffesseur;
 import dao.ProffesseurDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 /**
  * Servlet implementation class AddProfesseur
@@ -22,11 +24,13 @@ public class AddProfesseur extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ProffesseurDao profDao;
 	private ChifrageService chifrageService;
+	private UtilisateurDao userDao;
 
     public AddProfesseur() throws ClassNotFoundException, SQLException {
         super();
         profDao = new ProffesseurDao();
         chifrageService = new ChifrageService();
+        userDao = new UtilisateurDao();
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -90,10 +94,12 @@ public class AddProfesseur extends HttpServlet {
 		}
 		try {
 			String id = chifrageService.ChifreId(profDao.GetCurrentProfesseur(), "prof" );
-			Proffesseur prof = new Proffesseur(id,nom,prenom,email,telephone);
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			Proffesseur prof = new Proffesseur(id,nom,prenom,email,telephone,user);
 			if(profDao.InsertProfesseur(prof)) {
-				RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/Professeurs/add-professeur.jsp");
-				dispatcher.forward(request, response);
+				response.sendRedirect("list-professeur");
+	
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();

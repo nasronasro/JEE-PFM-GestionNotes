@@ -6,6 +6,7 @@ public class Proffesseur {
 	private String prenom;
 	private String email;
 	private String telephone;
+	private Utilisateur user;
 	
 	public Proffesseur(String id) {
 		Id_proffesseur = id;
@@ -17,12 +18,13 @@ public class Proffesseur {
 		this.prenom = prenom;
 	}
 	
-	public Proffesseur(String id,String nom,String prenom,String email, String telephone) {
+	public Proffesseur(String id,String nom,String prenom,String email, String telephone,Utilisateur user) {
 		Id_proffesseur = id;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.email = email;
 		this.telephone = telephone;
+		this.setUser(user);
 	}
 	public Proffesseur(String nom,String prenom,String email, String telephone) {
 		this.nom = nom;
@@ -59,5 +61,13 @@ public class Proffesseur {
 	}
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public Utilisateur getUser() {
+		return user;
+	}
+
+	public void setUser(Utilisateur user) {
+		this.user = user;
 	}
 }

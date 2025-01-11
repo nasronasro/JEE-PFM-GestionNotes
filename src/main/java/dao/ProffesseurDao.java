@@ -22,10 +22,12 @@ public class ProffesseurDao {
 		}
 		return false;
 	}
-	public List<Proffesseur> GetAllProffessors() throws SQLException{
+	public List<Proffesseur> GetAllProffessors(Utilisateur user) throws SQLException{
 		List<Proffesseur> listProfs= new ArrayList<Proffesseur>();
 		
-		PreparedStatement ps = cnx.prepareStatement("SELECT Id_proffesseur,Nom,Prenom,Email,Telephone FROM Proffesseurs");
+		PreparedStatement ps = cnx.prepareStatement("SELECT Id_proffesseur,Nom,Prenom,Email,Telephone "
+				+ "FROM Proffesseurs  WHERE id_utilisateur = ? ");
+		ps.setString(1, user.getId_utilisateur() );
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			String id = rs.getString(1);
@@ -34,7 +36,7 @@ public class ProffesseurDao {
 			String email = rs.getString(4);
 			String telephone = rs.getString(5);
 			
-			listProfs.add(new Proffesseur(id,nom,prenom,email,telephone));	
+			listProfs.add(new Proffesseur(id,nom,prenom,email,telephone,user));	
 		}
 			
 		return listProfs;
@@ -43,12 +45,13 @@ public class ProffesseurDao {
 	public boolean InsertProfesseur(Proffesseur prof) throws SQLException, ClassNotFoundException
 	{
 		
-		PreparedStatement ps = cnx.prepareStatement("INSERT INTO proffesseurs(`Id_proffesseur`,`nom`,`prenom`,`email`,`telephone`) VALUES ( ?, ? , ? , ?, ? )");
+		PreparedStatement ps = cnx.prepareStatement("INSERT INTO proffesseurs(`Id_proffesseur`,`nom`,`prenom`,`email`,`telephone`,id_utilisateur) VALUES ( ?, ? , ? , ?, ?,?)");
 		ps.setString(1, prof.getId_proffesseur());
 		ps.setString(2, prof.getNom());
 		ps.setString(3, prof.getPrenom());
 		ps.setString(4, prof.getEmail());
 		ps.setString(5, prof.getTelephone());
+		ps.setString(6, prof.getUser().getId_utilisateur());
 		if(ps.executeUpdate() == 1 ) {
 			System.out.println("Insertion Done");
 			return true;
@@ -56,25 +59,26 @@ public class ProffesseurDao {
 		return false;
 	}
 	
-	public boolean UpdateProfesseur(Proffesseur prof) throws SQLException,ClassNotFoundException {
+	public boolean UpdateProfesseur(Proffesseur prof,String id_user) throws SQLException,ClassNotFoundException {
 
-		PreparedStatement ps = cnx.prepareStatement("UPDATE proffesseurs SET nom = ? , prenom = ?, email = ?,telephone = ? where Id_proffesseur = ?");
+		PreparedStatement ps = cnx.prepareStatement("UPDATE proffesseurs SET nom = ? , prenom = ?, email = ?,telephone = ? where Id_proffesseur = ? and id_utilisateur = ?");
 		ps.setString(1, prof.getNom());
 		ps.setString(2, prof.getPrenom());
 		ps.setString(3, prof.getEmail());
 		ps.setString(4, prof.getTelephone());
 		ps.setString(5, prof.getId_proffesseur());
+		ps.setString(5, prof.getUser().getId_utilisateur());
 		if(ps.executeUpdate() == 1 ) {
 			System.out.println("Modification Done");
 			return true;
 		}
 		return false;
 	}
-	public Proffesseur GetProfessor(String id_searched) throws SQLException{
+	public Proffesseur GetProfessor(String id_searched,Utilisateur user) throws SQLException{
 
-		PreparedStatement ps = cnx.prepareStatement("SELECT Id_proffesseur,Nom,Prenom,Email,Telephone FROM Proffesseurs where id_proffesseur = ?");
+		PreparedStatement ps = cnx.prepareStatement("SELECT Id_proffesseur,Nom,Prenom,Email,Telephone FROM Proffesseurs where id_proffesseur = ? and id_utilisateur = ?");
 		ps.setString(1, id_searched);
-		
+		ps.setString(2, user.getId_utilisateur());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			String id = rs.getString(1);
@@ -83,7 +87,7 @@ public class ProffesseurDao {
 			String email = rs.getString(4);
 			String telephone = rs.getString(5);
 			
-			return new Proffesseur(id,nom,prenom,email,telephone);	
+			return new Proffesseur(id,nom,prenom,email,telephone,user);	
 		}
 		return null;
 	}

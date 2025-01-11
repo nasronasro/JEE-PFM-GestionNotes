@@ -14,15 +14,19 @@ import java.sql.SQLException;
 import dao.NoteDao;
 import dao.Proffesseur;
 import dao.ProffesseurDao;
+import dao.Utilisateur;
+import dao.UtilisateurDao;
 
 @WebServlet("/modify-professeur")
 public class ModifyProfesseur extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ProffesseurDao profDao;
+	private UtilisateurDao userDao;
 	
     public ModifyProfesseur() throws ClassNotFoundException, SQLException {
         super();
         profDao  = new ProffesseurDao();
+        userDao = new UtilisateurDao();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("id_professeur") == null) {
@@ -36,7 +40,9 @@ public class ModifyProfesseur extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/list-professeur");	
 				return;
 			}	
-			Proffesseur prof = profDao.GetProfessor(id);
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			Proffesseur prof = profDao.GetProfessor(id,user);
 			request.setAttribute("id_prof", id);
 			request.setAttribute("nom", prof.getNom());
 			request.setAttribute("prenom", prof.getPrenom());
@@ -110,8 +116,10 @@ public class ModifyProfesseur extends HttpServlet {
 		    return;
 		}
 		try {
-			Proffesseur prof = new Proffesseur(id,nom,prenom,email,telephone);
-			if(profDao.UpdateProfesseur(prof)) {
+			String username = request.getSession().getAttribute("username").toString();
+			Utilisateur user = userDao.GetUserByUsername(username);
+			Proffesseur prof = new Proffesseur(id,nom,prenom,email,telephone,user);
+			if(profDao.UpdateProfesseur(prof,user.getId_utilisateur())) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/Professeurs/list-professeur.jsp");
 				dispatcher.forward(request, response);
 			}
