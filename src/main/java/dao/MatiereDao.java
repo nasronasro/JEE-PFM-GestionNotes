@@ -118,4 +118,15 @@ public class MatiereDao {
 		}
 		return null;
 	}
+	public boolean DeleteMatiere(String id,Utilisateur user) throws SQLException {
+		PreparedStatement ps = cnx.prepareStatement("Delete from matiere where Id_matiere = ?");
+		ps.setString(1, id);
+		if(ps.executeUpdate() == 1 ) {
+			System.out.println("Deletion Done!");
+			return true;
+		}
+		
+		return false;
+		
+	}
 }

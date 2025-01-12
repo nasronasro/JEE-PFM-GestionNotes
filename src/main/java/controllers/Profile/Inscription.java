@@ -32,23 +32,16 @@ public class Inscription extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		boolean hasError = false;
-		
+
 		String mdp = request.getParameter("mdp");
 		String confirmMdp = request.getParameter("cmdp");
 		// Validation for 'mdp'
 		if (mdp == null || mdp.trim().isEmpty()) {
 		    request.setAttribute("mdpError", "Le champ 'mot de passe' est requis et ne peut pas être vide.");
 		    hasError = true;
-		} /*else if (mdp.length() < 8 || 
-		           !mdp.matches(".*[A-Z].*") || 
-		           !mdp.matches(".*[a-z].*") || 
-		           !mdp.matches(".*[0-9].*") || 
-		           !mdp.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-		    request.setAttribute("mdpError", "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre, et un caractère spécial.");
-		    hasError = true;
-		}*/
+		} 
 
 		// Validation for 'cmdp'
 		if (confirmMdp == null || confirmMdp.trim().isEmpty()) {
@@ -58,7 +51,7 @@ public class Inscription extends HttpServlet {
 		    request.setAttribute("cmdpError", "Les mots de passe ne correspondent pas.");
 		    hasError = true;
 		}
-		
+
 		int id = 0;
 		try {
 			id = userDao.CurrentIncrementValue();
@@ -66,7 +59,7 @@ public class Inscription extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(userDao == null) return;
-		
+
 		String username = request.getParameter("username");
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");

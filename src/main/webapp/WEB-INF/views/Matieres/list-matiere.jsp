@@ -27,8 +27,10 @@
 					<td><%= mate.getLabel() %></td>
 					<td><%= mate.getImportance() %></td>
 					<td><%= mate.getProffesseur().getNom() + " " + mate.getProffesseur().getPrenom() %></td>
-					<td><form>
+					<td>
+						<form>
 							<a class="btn btn-outline-warning btn-sm" href="/Web003_tester/modify-matiere?id_matiere=<%= mate.getId_matiere() %>">Modifier</a>
+							<a class="btn btn-outline-danger btn-sm" href="/Web003_tester/delete-matiere?id_matiere=<%= mate.getId_matiere() %>">Supprimer</a>
 						</form>
 					</td>
 				</tr>	

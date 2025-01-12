@@ -44,7 +44,6 @@
                 <div class="card">
                   <div class="card-header"><%= note.getTitre() %></div>
                   <div class="card-body">
-                    <h5 class="card-title"><%=  note.getId_note() %></h5>
                     <div class="card-text-container">
                   		<p class="card-text"><%= note.getContenue() %></p>
                   	</div>

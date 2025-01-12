@@ -9,7 +9,11 @@ form .input-design {
     outline: none;
     transition: border-color 0.3s ease;
 }
-
+form .input-design:active {
+	border-color: #5a9bd8 !important; 
+	background-color: #1e1e1e !important;
+	color: #ffffff !important;
+}
 form .input-design:hover {
-	border-color: #5a9bd8 !important; /* Blueish border on hover */
+	border-color: #5a9bd8 !important; 
 }

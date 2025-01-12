@@ -31,8 +31,10 @@
 					<td><%= prof.getPrenom() %></td>
 					<td><%= prof.getEmail() %></td>
 					<td><%= prof.getTelephone() %></td>
-					<td><form>
+					<td>
+						<form>
 							<a class="btn btn-outline-warning btn-sm" href="/Web003_tester/modify-professeur?id_professeur=<%= prof.getId_proffesseur() %>">Modifier</a>
+							<a class="btn btn-outline-danger btn-sm" href="/Web003_tester/delete-professeur?id_professeur=<%= prof.getId_proffesseur() %>">Supprimer</a>
 						</form>
 					</td>
 				</tr>	

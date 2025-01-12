@@ -49,7 +49,7 @@
         	<span class="text-danger"><%= request.getAttribute("proffesseurError").toString() %></span>		    	
 			<%} %>
 	    </div>
-	    <button type="submit" class="btn btn-outline-success w-25">Modifier Matiere</button>
+	    <button type="submit" class="btn btn-outline-success w-25">Modifier matiere</button>
 	    <a href="modify-matiere" class="btn btn-outline-danger">Annuler</a>
 	</form>
 	

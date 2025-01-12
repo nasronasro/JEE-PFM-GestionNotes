@@ -13,9 +13,6 @@ import dao.ProffesseurDao;
 import dao.Utilisateur;
 import dao.UtilisateurDao;
 
-/**
- * Servlet implementation class ListProfesseur
- */
 @WebServlet("/list-professeur")
 public class ListProfesseur extends HttpServlet {
 	private static final long serialVersionUID = 1L;

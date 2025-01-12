@@ -103,4 +103,14 @@ public class ProffesseurDao {
 		psInsertAI.executeUpdate();
 		return res;
 	}
+	public boolean DeleteProfesseur(String id) throws SQLException {
+		PreparedStatement ps = cnx.prepareStatement("Delete from proffesseurs where Id_proffesseur = ?");
+		ps.setString(1, id);
+		if(ps.executeUpdate() == 1 ) {
+			System.out.println("Deletion Done!");
+			return true;
+		}
+		
+		return false;
+	}
 }

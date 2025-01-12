@@ -35,7 +35,7 @@
 
 	  
 	  <div class="form-group mb-3">
-		  <button type="submit" class="btn btn-outline-success btn-lg">Ajouter</button>
+		  <button type="submit" class="btn btn-outline-success btn-lg">Ajouter professeur</button>
 		  <a href="list-professeur" class="btn btn-outline-danger" >Annuller</a>
 	  </div>
 	 </div>

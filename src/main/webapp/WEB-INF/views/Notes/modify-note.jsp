@@ -23,7 +23,7 @@
 		  </div>
 		  <div class="form-group col-md-6 mb-3">
 		    <label class="form-label">Contenue</label>
-		    <textarea rows="5" name="content" class="form-control"><%= request.getAttribute("content").toString() %></textarea>
+		    <textarea rows="5" name="content" class="form-control input-design"><%= request.getAttribute("content").toString() %></textarea>
 		  </div>
 		  
 		  <div class="form-group col-md-6 mb-3"">

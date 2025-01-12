@@ -19,7 +19,7 @@
 		<%} %>
 	  </div>
 	  <div class="form-group mb-3">
-		  <button type="submit" class="btn btn-outline-primary btn-lg">Login</button>
+		  <button type="submit" class="btn btn-outline-primary btn-lg">Se Connecter</button>
 	  </div>
 	 </div>
 	</form>

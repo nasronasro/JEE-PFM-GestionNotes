@@ -66,7 +66,7 @@
 
 	  
 	  <div class="form-group mb-3">
-		  <button type="submit" class="btn btn-outline-primary btn-lg">Inscription</button>
+		  <button type="submit" class="btn btn-outline-primary btn-lg">S'iscrire</button>
 	  </div>
 	 </div>
 	</form>
